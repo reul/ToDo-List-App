@@ -1,16 +1,18 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
+    compileSdk = 35
 
     defaultConfig {
-        applicationId "com.example.todoapp"
-        minSdkVersion 23
-        targetSdkVersion 29
+        namespace = "com.example.todoapp"
+        minSdk = 23
+        targetSdk = 35
         versionCode 1
         versionName "1.0"
 
@@ -24,7 +26,22 @@ android {
         }
     }
 
+    viewBinding {
+        enabled = true
+
+    }
+
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
 }
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -42,7 +59,7 @@ dependencies {
 
 
     //database
-    implementation "androidx.room:room-runtime:2.2.3"
-    implementation "androidx.room:room-ktx:2.2.3"
-    kapt "androidx.room:room-compiler:2.2.3"
+    implementation "androidx.room:room-runtime:2.7.1"
+    implementation "androidx.room:room-ktx:2.7.1"
+    kapt("androidx.room:room-compiler:2.7.1")
 }

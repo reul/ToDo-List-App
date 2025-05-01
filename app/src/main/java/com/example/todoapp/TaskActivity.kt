@@ -9,7 +9,7 @@ import android.widget.DatePicker
 import android.widget.TimePicker
 import androidx.appcompat.app.AppCompatActivity
 import androidx.room.Room
-import kotlinx.android.synthetic.main.activity_task.*
+import com.example.todoapp.databinding.ActivityTaskBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -37,13 +37,16 @@ class TaskActivity : AppCompatActivity(), View.OnClickListener {
         AppDatabase.getDatabase(this)
     }
 
+    lateinit var binding: ActivityTaskBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_task)
+        binding = ActivityTaskBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        dateEdt.setOnClickListener(this)
-        timeEdt.setOnClickListener(this)
-        saveBtn.setOnClickListener(this)
+        binding.dateEdt.setOnClickListener(this)
+        binding.timeEdt.setOnClickListener(this)
+        binding.saveBtn.setOnClickListener(this)
 
 
         setUpSpinner()
@@ -55,7 +58,7 @@ class TaskActivity : AppCompatActivity(), View.OnClickListener {
 
         labels.sort()
 
-        spinnerCategory.adapter = adapter
+        binding.spinnerCategory.adapter = adapter
     }
 
     override fun onClick(v: View) {
@@ -74,9 +77,9 @@ class TaskActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun saveTodo() {
-        val category = spinnerCategory.selectedItem.toString()
-        val title = titleInpLay.editText?.text.toString()
-        val description = taskInpLay.editText?.text.toString()
+        val category = binding.spinnerCategory.selectedItem.toString()
+        val title = binding.titleInpLay.editText?.text.toString()
+        val description = binding.taskInpLay.editText?.text.toString()
 
         GlobalScope.launch(Dispatchers.Main) {
             val id = withContext(Dispatchers.IO) {
@@ -117,7 +120,7 @@ class TaskActivity : AppCompatActivity(), View.OnClickListener {
         val myformat = "h:mm a"
         val sdf = SimpleDateFormat(myformat)
         finalTime = myCalendar.time.time
-        timeEdt.setText(sdf.format(myCalendar.time))
+        binding.timeEdt.setText(sdf.format(myCalendar.time))
 
     }
 
@@ -146,9 +149,9 @@ class TaskActivity : AppCompatActivity(), View.OnClickListener {
         val myformat = "EEE, d MMM yyyy"
         val sdf = SimpleDateFormat(myformat)
         finalDate = myCalendar.time.time
-        dateEdt.setText(sdf.format(myCalendar.time))
+        binding.dateEdt.setText(sdf.format(myCalendar.time))
 
-        timeInptLay.visibility = View.VISIBLE
+        binding.timeInptLay.visibility = View.VISIBLE
 
     }
 
