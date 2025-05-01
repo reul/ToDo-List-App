@@ -1,11 +1,9 @@
 package com.example.todoapp
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.activity_task.*
-import kotlinx.android.synthetic.main.item_todo.view.*
+import com.example.todoapp.databinding.ItemTodoBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -16,10 +14,8 @@ class TodoAdapter(val list: List<TodoModel>) : RecyclerView.Adapter<TodoAdapter.
     // 1st func
     // In this Layout inflatter is called which converts view in such a form that adapter can consume it
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
-        return TodoViewHolder(
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_todo, parent, false)
-        )
+        val binder = ItemTodoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return TodoViewHolder(binder)
     }
 
 
@@ -37,15 +33,15 @@ class TodoAdapter(val list: List<TodoModel>) : RecyclerView.Adapter<TodoAdapter.
     }
 
     // view holder is present inside the recycler view
-    class TodoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class TodoViewHolder(val binder: ItemTodoBinding) : RecyclerView.ViewHolder(binder.root) {
         fun bind(todoModel: TodoModel) {
             with(itemView) {
                 val colors = resources.getIntArray(R.array.random_color)
                 val randomColor = colors[Random().nextInt(colors.size)]
-                viewColorTag.setBackgroundColor(randomColor)
-                txtShowTitle.text = todoModel.title
-                txtShowTask.text = todoModel.description
-                txtShowCategory.text = todoModel.category
+                binder.viewColorTag.setBackgroundColor(randomColor)
+                binder.txtShowTitle.text = todoModel.title
+                binder.txtShowTask.text = todoModel.description
+                binder.txtShowCategory.text = todoModel.category
                 updateTime(todoModel.time)
                 updateDate(todoModel.date)
 
@@ -55,7 +51,7 @@ class TodoAdapter(val list: List<TodoModel>) : RecyclerView.Adapter<TodoAdapter.
             //Mon, 5 Jan 2020
             val myformat = "h:mm a"
             val sdf = SimpleDateFormat(myformat)
-            itemView.txtShowTime.text = sdf.format(Date(time))
+            binder.txtShowTime.text = sdf.format(Date(time))
 
         }
 
@@ -63,7 +59,7 @@ class TodoAdapter(val list: List<TodoModel>) : RecyclerView.Adapter<TodoAdapter.
             //Mon, 5 Jan 2020
             val myformat = "EEE, d MMM yyyy"
             val sdf = SimpleDateFormat(myformat)
-            itemView.txtShowDate.text = sdf.format(Date(time))
+            binder.txtShowDate.text = sdf.format(Date(time))
 
         }
     }
